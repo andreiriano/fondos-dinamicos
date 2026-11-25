@@ -1,0 +1,44 @@
+{
+  "intensidad": {
+    "type": "slider",
+    "text": "Intensidad de la aurora",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 70
+  },
+  "colorAurora": {
+    "type": "color",
+    "text": "Color principal de la aurora",
+    "value": "#3dffa6"
+  },
+  "colorAurora2": {
+    "type": "color",
+    "text": "Color de la parte alta",
+    "value": "#a05cff"
+  },
+  "nieve": {
+    "type": "slider",
+    "text": "Cantidad de nieve",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 30
+  },
+  "fuerzaCursor": {
+    "type": "slider",
+    "text": "Fuerza del ratón",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 60
+  },
+  "fps": {
+    "type": "slider",
+    "text": "Fotogramas por segundo (menos = gasta menos)",
+    "min": 15,
+    "max": 60,
+    "step": 15,
+    "value": 30
+  }
+}

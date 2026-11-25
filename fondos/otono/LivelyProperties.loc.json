@@ -1,0 +1,10 @@
+{
+  "Languages": {
+    "en": {
+      "hojas": { "text": "Number of leaves" },
+      "viento": { "text": "Wind" },
+      "fuerzaCursor": { "text": "Mouse strength on the leaves" },
+      "fps": { "text": "Frames per second (lower = uses less power)" }
+    }
+  }
+}

@@ -84,7 +84,8 @@
    *   capas: ['fondo', 'fx'],     // lienzos de abajo arriba
    *   opaca: 'fondo',             // capa sin transparencia (más rápida); omitir si debajo hay vídeo
    *   ajustes: { ... },           // valores por defecto
-   *   alRedimensionar(e), dibujarFondo(ctx, e), dibujar(e, dt), alTocar(x, y, e), alCambiarAjuste(nombre, valor, e)
+   *   alRedimensionar(e), dibujarFondo(ctx, e), dibujar(e, dt), alTocar(x, y, e), alCambiarAjuste(nombre, valor, e),
+   *   estaticas: { frente: function (ctx, e) {...} }  // capas fijas extra, se pintan solo al cambiar el tamaño
    * })
    * "e" es el estado: { ancho, alto, u, escala, t, reducido, ajustes, puntero, capas, redibujarFondo() }
    *   u = tamaño relativo a una pantalla 1920×1080 (1 en Full HD, 2 en 4K sin escalado).
@@ -145,9 +146,17 @@
       var amort = Math.pow(0.001, dt);
       p.vx *= amort; p.vy *= amort;
       if (p.activo && performance.now() - p.ultimo > 5000) p.activo = false;
-      if (fondoSucio && op.dibujarFondo && capas[nombresCapas[0]]) {
+      if (fondoSucio) {
         fondoSucio = false;
-        op.dibujarFondo(capas[nombresCapas[0]].ctx, e);
+        if (op.dibujarFondo && capas[nombresCapas[0]]) op.dibujarFondo(capas[nombresCapas[0]].ctx, e);
+        // Otras capas fijas (por ejemplo, un primer plano por delante del agua animada).
+        if (op.estaticas) {
+          for (var nombre in op.estaticas) {
+            if (!capas[nombre]) continue;
+            capas[nombre].ctx.clearRect(0, 0, e.ancho, e.alto);
+            op.estaticas[nombre](capas[nombre].ctx, e);
+          }
+        }
       }
       if (op.dibujar) op.dibujar(e, dt);
     }

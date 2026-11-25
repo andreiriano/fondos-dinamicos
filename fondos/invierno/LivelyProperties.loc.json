@@ -1,0 +1,12 @@
+{
+  "Languages": {
+    "en": {
+      "intensidad": { "text": "Aurora intensity" },
+      "colorAurora": { "text": "Main aurora colour" },
+      "colorAurora2": { "text": "Upper colour" },
+      "nieve": { "text": "Amount of snow" },
+      "fuerzaCursor": { "text": "Mouse strength" },
+      "fps": { "text": "Frames per second (lower = uses less power)" }
+    }
+  }
+}

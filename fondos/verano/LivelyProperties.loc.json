@@ -1,0 +1,10 @@
+{
+  "Languages": {
+    "en": {
+      "pompas": { "text": "Number of bubbles" },
+      "fuerzaCursor": { "text": "Mouse strength on the bubbles" },
+      "gaviotas": { "text": "Show seagulls" },
+      "fps": { "text": "Frames per second (lower = uses less power)" }
+    }
+  }
+}

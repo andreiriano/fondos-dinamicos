@@ -1,0 +1,17 @@
+{
+  "AppVersion": "2.1.0.0",
+  "Title": "Aurora de invierno",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": null,
+  "Desc": "Aurora boreal sobre montañas nevadas que se curva y brilla hacia el ratón, con reflejo en el lago. Clic en el cielo: estrella fugaz.",
+  "Author": "Fondos Dinámicos",
+  "License": "MIT",
+  "Contact": "https://xuiatek.com/fondos",
+  "Type": 1,
+  "FileName": "index.html",
+  "Arguments": "--pause-event true",
+  "IsAbsolutePath": false,
+  "Id": null,
+  "Tags": ["invierno", "aurora", "interactivo"],
+  "Version": 1
+}

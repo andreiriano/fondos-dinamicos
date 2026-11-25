@@ -1,0 +1,31 @@
+{
+  "pompas": {
+    "type": "slider",
+    "text": "Cantidad de pompas",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 50
+  },
+  "fuerzaCursor": {
+    "type": "slider",
+    "text": "Fuerza del ratón sobre las pompas",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 60
+  },
+  "gaviotas": {
+    "type": "checkbox",
+    "text": "Mostrar gaviotas",
+    "value": true
+  },
+  "fps": {
+    "type": "slider",
+    "text": "Fotogramas por segundo (menos = gasta menos)",
+    "min": 15,
+    "max": 60,
+    "step": 15,
+    "value": 30
+  }
+}
