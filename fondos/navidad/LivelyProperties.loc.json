@@ -1,0 +1,10 @@
+{
+  "Languages": {
+    "en": {
+      "nieve": { "text": "Amount of snow" },
+      "fuerzaCursor": { "text": "Mouse strength on the snow" },
+      "patronLuces": { "text": "Light pattern", "items": ["Classic twinkle", "Wave", "Rainbow", "Warm white"] },
+      "fps": { "text": "Frames per second (lower = uses less power)" }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "nieve": {
+    "type": "slider",
+    "text": "Cantidad de nieve",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 60
+  },
+  "fuerzaCursor": {
+    "type": "slider",
+    "text": "Fuerza del ratón sobre la nieve",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 60
+  },
+  "patronLuces": {
+    "type": "dropdown",
+    "text": "Juego de luces",
+    "items": ["Parpadeo clásico", "Ola", "Arcoíris", "Blanco cálido"],
+    "value": 0
+  },
+  "fps": {
+    "type": "slider",
+    "text": "Fotogramas por segundo (menos = gasta menos)",
+    "min": 15,
+    "max": 60,
+    "step": 15,
+    "value": 30
+  }
+}
