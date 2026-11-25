@@ -115,7 +115,7 @@ guarda caché y permite regenerar miniaturas con `FondosDinamicos.actual.captura
 `fondos/navidad/index.html?nieve=100&fps=60&patronLuces=2`.
 
 **Arte generado con IA** (fondo de Navidad): los originales de Gemini y Veo van en `originales-ia/navidad/`
-(fuera de git; los prompts, en [originales-ia/PROMPTS.md](originales-ia/PROMPTS.md)). Para quitar el fondo verde,
+(fuera de git; los prompts, en [originales-ia/PROMPTS.md](originales-ia/PROMPTS.md)). Para quitar el fondo de color liso (magenta),
 separar los sprites y optimizar imagen y vídeo (WebP, MP4 H.264 y WebM de menos de ~8 MB):
 
 ```powershell
@@ -140,4 +140,6 @@ de `LivelyProperties.json`, su [guía oficial](https://github.com/rocksdanister/
 ## Licencia
 
 [MIT](LICENSE): puedes usar, copiar, modificar y compartir estos fondos, también en proyectos comerciales,
-manteniendo el aviso de licencia. Todos los dibujos se generan con código, sin imágenes de terceros.
+manteniendo el aviso de licencia. Los fondos de verano, otoño e invierno se dibujan con código. El arte del fondo de Navidad (aldea, árbol y
+adornos) se generó con IA, con Gemini de Google, para este proyecto; los prompts están en
+[originales-ia/PROMPTS.md](originales-ia/PROMPTS.md).

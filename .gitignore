@@ -12,3 +12,4 @@ originales-ia/**
 !originales-ia/*/
 !originales-ia/**/*.md
 !originales-ia/**/sprites.txt
+.claude-launch-tmp
