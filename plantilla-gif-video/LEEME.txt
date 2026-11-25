@@ -1,0 +1,30 @@
+MI FONDO CON EFECTO - Fondos Dinámicos
+======================================
+
+Cómo poner tu propia imagen, GIF o vídeo:
+
+1. Descomprime este zip en una carpeta (clic derecho > Extraer todo).
+2. Borra mi-fondo.jpg y copia tu archivo en la carpeta con el nombre
+   mi-fondo.mp4, mi-fondo.gif o mi-fondo.jpg (también vale .webm, .webp o .png).
+3. Selecciona TODOS los archivos de la carpeta (Ctrl+E), clic derecho >
+   Comprimir en archivo ZIP. (Comprime los archivos, no la carpeta.)
+4. Arrastra el nuevo .zip a la ventana de Lively Wallpaper. ¡Listo!
+
+El efecto (nieve, hojas, pétalos, pompas, luciérnagas, estrellas, confeti o
+corazones) se cambia en Lively: clic derecho sobre el fondo > Personalizar.
+También puedes cambiar el efecto por defecto en ajustes.js con el Bloc de notas.
+
+Consejo: un vídeo MP4 gasta menos que un GIF grande.
+
+--------------------------------------------------------------------------
+
+MY WALLPAPER WITH AN EFFECT - How to use your own image, GIF or video:
+
+1. Unzip this file into a folder (right-click > Extract all).
+2. Delete mi-fondo.jpg and copy your file into the folder named
+   mi-fondo.mp4, mi-fondo.gif or mi-fondo.jpg (.webm, .webp and .png also work).
+3. Select ALL the files in the folder (Ctrl+A), right-click >
+   Compress to ZIP file. (Compress the files, not the folder.)
+4. Drag the new .zip into the Lively Wallpaper window. Done!
+
+Change the effect in Lively: right-click the wallpaper > Customise.
