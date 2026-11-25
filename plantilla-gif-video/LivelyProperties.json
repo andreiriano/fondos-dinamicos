@@ -1,0 +1,62 @@
+{
+  "efecto": {
+    "type": "dropdown",
+    "text": "Efecto",
+    "items": ["Ninguno", "Nieve", "Hojas de otoño", "Pétalos", "Pompas de jabón", "Luciérnagas", "Estrellas", "Confeti", "Corazones"],
+    "value": 1
+  },
+  "cantidad": {
+    "type": "slider",
+    "text": "Cantidad",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 50
+  },
+  "tamano": {
+    "type": "slider",
+    "text": "Tamaño (%)",
+    "min": 30,
+    "max": 300,
+    "step": 10,
+    "value": 100
+  },
+  "velocidad": {
+    "type": "slider",
+    "text": "Velocidad (%)",
+    "min": 10,
+    "max": 300,
+    "step": 10,
+    "value": 100
+  },
+  "fuerzaCursor": {
+    "type": "slider",
+    "text": "Fuerza del ratón",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "value": 60
+  },
+  "oscurecer": {
+    "type": "slider",
+    "text": "Oscurecer la imagen",
+    "min": 0,
+    "max": 90,
+    "step": 5,
+    "value": 0
+  },
+  "ajuste": {
+    "type": "dropdown",
+    "text": "Cómo encajar la imagen",
+    "items": ["Cubrir la pantalla", "Verla entera", "Estirar"],
+    "value": 0
+  },
+  "fps": {
+    "type": "slider",
+    "text": "Fotogramas por segundo del efecto (menos = gasta menos)",
+    "min": 15,
+    "max": 60,
+    "step": 15,
+    "value": 30
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "AppVersion": "2.1.0.0",
+  "Title": "Mi fondo con efecto",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": null,
+  "Desc": "Tu imagen, GIF o vídeo de fondo con un efecto interactivo encima: nieve, hojas, pétalos, pompas, luciérnagas, estrellas, confeti o corazones.",
+  "Author": "Fondos Dinámicos",
+  "License": "MIT",
+  "Contact": "https://xuiatek.com/fondos",
+  "Type": 1,
+  "FileName": "index.html",
+  "Arguments": "--pause-event true",
+  "IsAbsolutePath": false,
+  "Id": null,
+  "Tags": ["plantilla", "gif", "video", "interactivo"],
+  "Version": 1
+}

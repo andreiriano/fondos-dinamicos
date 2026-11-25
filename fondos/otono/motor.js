@@ -85,7 +85,9 @@
    *   opaca: 'fondo',             // capa sin transparencia (más rápida); omitir si debajo hay vídeo
    *   ajustes: { ... },           // valores por defecto
    *   alRedimensionar(e), dibujarFondo(ctx, e), dibujar(e, dt), alTocar(x, y, e), alCambiarAjuste(nombre, valor, e),
-   *   estaticas: { frente: function (ctx, e) {...} }  // capas fijas extra, se pintan solo al cambiar el tamaño
+   *   estaticas: { frente: function (ctx, e) {...} }, // capas fijas extra, se pintan solo al cambiar el tamaño
+   *   alPausar(pausado, e),                            // aviso al pausar/reanudar (p. ej. para parar un vídeo)
+   *   capturarDebajo(ctx, ancho, alto)                 // qué pintar bajo las capas al hacer una miniatura
    * })
    * "e" es el estado: { ancho, alto, u, escala, t, reducido, ajustes, puntero, capas, redibujarFondo() }
    *   u = tamaño relativo a una pantalla 1920×1080 (1 en Full HD, 2 en 4K sin escalado).
@@ -177,9 +179,11 @@
       if (debeCorrer && !corriendo) {
         corriendo = true; ultimo = 0;
         rafId = global.requestAnimationFrame(cuadro);
+        if (op.alPausar) op.alPausar(false, e);
       } else if (!debeCorrer && corriendo) {
         corriendo = false;
         global.cancelAnimationFrame(rafId);
+        if (op.alPausar) op.alPausar(true, e);
       }
     }
 

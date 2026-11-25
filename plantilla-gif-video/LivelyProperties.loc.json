@@ -1,0 +1,14 @@
+{
+  "Languages": {
+    "en": {
+      "efecto": { "text": "Effect", "items": ["None", "Snow", "Autumn leaves", "Petals", "Soap bubbles", "Fireflies", "Stars", "Confetti", "Hearts"] },
+      "cantidad": { "text": "Amount" },
+      "tamano": { "text": "Size (%)" },
+      "velocidad": { "text": "Speed (%)" },
+      "fuerzaCursor": { "text": "Mouse strength" },
+      "oscurecer": { "text": "Darken the image" },
+      "ajuste": { "text": "How to fit the image", "items": ["Fill the screen", "Show it whole", "Stretch"] },
+      "fps": { "text": "Effect frames per second (lower = uses less power)" }
+    }
+  }
+}
