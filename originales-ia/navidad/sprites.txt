@@ -1,0 +1,12 @@
+# número del índice (_sprites-indice.jpg) = nombre
+1 = regalo-rojo
+2 = regalo-azul
+3 = regalo-dorado
+4 = estrella
+5 = adorno-rojo
+6 = adorno-dorado
+7 = adorno-azul
+8 = adorno-morado
+9 = copo-dorado
+10 = muneco
+11 = trineo

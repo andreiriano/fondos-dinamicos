@@ -14,7 +14,7 @@ py herramientas/preparar_arte.py navidad
 
 Estilo común: 3D tipo Pixar, como el avatar de xuiatek.com.
 
-### `plano.png` (Gemini, imagen 16:9)
+### `plano.jpeg` (Gemini, imagen 16:9)
 
 Aldea nevada de noche; lado derecho libre para el árbol y centro despejado.
 
@@ -26,19 +26,26 @@ Aldea nevada de noche; lado derecho libre para el árbol y centro despejado.
 
 Anima `plano.png`: humo de chimeneas, ventanas que parpadean, estrellas. Primer y último fotograma = el plano.
 
-```
-(pendiente: pegar aquí el prompt exacto)
-```
-
-### `arbol.png` (Gemini, sobre verde puro #00FF00)
-
-Árbol con guirnaldas y bombillas **apagadas**.
+> **Pendiente (24 nov 2026):** el primer `plano-loop.mp4` recibido es otra escena (una cabaña centrada en un
+> bosque, 1280×720, 10 s): no parte del plano, no tiene la luna ni hueco para el árbol. No se usa. Hay que
+> generarlo en Veo **desde la imagen** (`plano.jpeg` como primer fotograma, image-to-video) y a 1920×1080 si se
+> puede. Mientras tanto el fondo usa la imagen fija y anima él mismo humo, ventanas, estrellas y nieve.
+> Hasta tener el vídeo bueno, procesa con `py herramientas/preparar_arte.py navidad --sin-video`.
 
 ```
 (pendiente: pegar aquí el prompt exacto)
 ```
 
-### `sprites.png` (Gemini, sobre verde puro #00FF00)
+### `arbol.jpeg` (Gemini, sobre color liso)
+
+Árbol con guirnaldas y bombillas **apagadas** (llegó sobre magenta, con la estrella y regalos en la base).
+Las bombillas se localizan con `py herramientas/detectar_bombillas.py originales-ia/navidad/arbol.jpeg`.
+
+```
+(pendiente: pegar aquí el prompt exacto)
+```
+
+### `sprites.jpeg` (Gemini, sobre color liso)
 
 Regalos, estrella, adornos, un copo dorado y el trineo de Papá Noel, separados entre sí.
 Opcional: un muñeco de nieve (si falta, el fondo dibuja uno sencillo).
@@ -53,7 +60,9 @@ Después de procesar `sprites.png`, mira `originales-ia/navidad/_sprites-indice.
 
 ## Consejos para que la herramienta funcione bien
 
-- Fondo verde **liso** (#00FF00), sin sombras proyectadas sobre el verde ni degradados.
+- Fondo **liso** de un color que no esté en el dibujo: verde #00FF00 o magenta #FF00FF (Gemini entregó magenta y
+  funciona igual de bien). Sin sombras proyectadas sobre el fondo ni degradados.
+- Vale PNG o JPEG (`plano.jpeg`, `arbol.jpeg`, `sprites.jpeg`).
 - En `sprites.png`, deja aire entre objetos: los que se tocan salen como uno solo.
 - Evita objetos de un verde muy parecido al del fondo (el árbol oscuro está bien).
 - El vídeo debe empezar y terminar en el mismo fotograma; la herramienta quita el último si se repite.

@@ -60,7 +60,7 @@
   var pista = { i: -1, t0: 0, proxima: 5 };
   var brilloArbol = 0, brilloAplicado = -1;
   var patron = 0, proximoPatron = 25;
-  var luna = [0, 0];
+  var luna = [0, 0], escPlano = 1, humo = [], chimeneas = [], ventanas = [];
   var video = null;
   var avisoInicial = false, ultimoAvisoDecorativo = -99;
   var editor = { modo: 'luces', datos: null };
@@ -170,6 +170,9 @@
     caja.x0 = conf.x * W - caja.w / 2;
     caja.y0 = conf.base * H - caja.h;
     luna = planoAPantalla(S.plano.luna[0], S.plano.luna[1]);
+    escPlano = Math.max(W / (A.plano ? A.plano.w : 1920), H / (A.plano ? A.plano.h : 1080));
+    chimeneas = (S.plano.chimeneas || []).map(function (q) { return planoAPantalla(q[0], q[1]); });
+    ventanas = (S.plano.ventanas || []).map(function (q, i) { var v = planoAPantalla(q[0], q[1]); return { x: v[0], y: v[1], fase: i * 2.3, vel: 0.7 + (i % 5) * 0.25 }; });
     var pe = arbolAPantalla(S.arbol.estrella[0], S.arbol.estrella[1]);
     estrella.x = pe[0]; estrella.y = pe[1]; estrella.h = S.arbol.estrella[2] * caja.h;
     recalcularLuces();
@@ -632,6 +635,7 @@
         var yb = base + H * 0.05 * Math.sin(x * 0.0017 + t * (0.12 + k * 0.05) + k * 2) + H * 0.025 * Math.sin(x * 0.0043 - t * 0.08);
         var pl = 0.5 + 0.5 * Math.sin(x * (0.009 + k * 0.003) + t * 0.3 + Math.sin(x * 0.002 + t * 0.2) * 3);
         var al = aurora.alfa * (0.1 + 0.45 * pl * pl);
+        al *= F.limitar((Math.abs(x - luna[0]) - W * 0.06) / (W * 0.12), 0, 1); // no tapar la luna
         var h = alto * (0.6 + 0.4 * Math.sin(x * 0.003 + t * 0.15 + k));
         var x0 = Math.round(x * esc) / esc, x1 = Math.round((x + paso) * esc) / esc;
         ctx.globalAlpha = Math.min(1, al);
@@ -703,6 +707,7 @@
     var W = e.ancho, H = e.alto, u = e.u, t = e.t;
     ctx.clearRect(0, 0, W, H);
     dibujarAurora(ctx);
+    dibujarAldea(ctx, dt);
 
     // estrellas fugaces
     proximaFugaz -= dt;
@@ -740,6 +745,39 @@
     ctx.beginPath();
     for (var i = 0; i < nieveLejos.length; i++) { var c = nieveLejos[i]; ctx.moveTo(c.x + c.r, c.y); ctx.arc(c.x, c.y, c.r, 0, TAU); }
     ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // Humo de las chimeneas y ventanas que titilan (dan vida a la imagen fija de la aldea)
+  function dibujarAldea(ctx, dt) {
+    var u = e.u, t = e.t, lento = e.reducido ? 0.3 : 1;
+    ctx.globalCompositeOperation = 'lighter';
+    for (var v = 0; v < ventanas.length; v++) {
+      var vn = ventanas[v];
+      var k = 0.55 + 0.25 * Math.sin(t * vn.vel + vn.fase) + 0.2 * Math.sin(t * vn.vel * 3.7 + vn.fase * 2);
+      ctx.globalAlpha = 0.16 * k;
+      var tv = 70 * escPlano;
+      ctx.drawImage(BRILLO_CALIDO, vn.x - tv / 2, vn.y - tv / 2, tv, tv);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    for (var c = 0; c < chimeneas.length; c++) {
+      if (Math.random() < dt * 2.2 * lento) {
+        humo.push({ x: chimeneas[c][0] + (Math.random() - 0.5) * 6 * escPlano, y: chimeneas[c][1], r: 9 * escPlano, vida: 0, max: 5 + Math.random() * 2 });
+      }
+    }
+    for (var h = humo.length - 1; h >= 0; h--) {
+      var hu = humo[h];
+      hu.vida += dt;
+      if (hu.vida > hu.max) { humo.splice(h, 1); continue; }
+      var p = hu.vida / hu.max;
+      hu.y -= 26 * escPlano * dt * lento;
+      hu.x += (viento * 0.25 + Math.sin(t * 0.8 + h) * 6 * escPlano) * dt * lento;
+      hu.r += 9 * escPlano * dt;
+      ctx.globalAlpha = 0.22 * Math.sin(p * Math.PI) * (1 - p * 0.5);
+      var d = hu.r * 2.6;
+      ctx.drawImage(COPO_SUAVE, hu.x - d / 2, hu.y - d / 2, d, d);
+    }
     ctx.globalAlpha = 1;
   }
 
@@ -824,7 +862,7 @@
       var tb = l.r * 20;
       ctx.drawImage(BRILLOS[col], l.x - tb / 2, l.y - tb / 2, tb, tb);
       ctx.globalAlpha = Math.min(1, 0.75 * k);
-      tb = l.r * (7 + l.pop * 6);
+      tb = l.r * (6 + l.pop * 6);
       ctx.drawImage(BRILLOS[col], l.x - tb / 2, l.y - tb / 2, tb, tb);
       ctx.globalAlpha = Math.min(1, k);
       tb = l.r * 3.2;
@@ -859,9 +897,9 @@
     // estrella
     estrella.destello = Math.max(0, estrella.destello - dt * 0.6);
     celebracion = Math.max(0, celebracion - dt * 0.25);
-    var imE = img.estrella;
-    if (imE) {
-      var eh = estrella.h * (1 + estrella.destello * 0.15), ew = eh * imE.width / imE.height;
+    var imE = img.estrella, enArbol = !!S.arbol.estrellaEnArbol;
+    if (imE || enArbol) {
+      var eh = estrella.h * (1 + estrella.destello * 0.15), ew = imE ? eh * imE.width / imE.height : eh;
       if (completo || solo) {
         var pulso = 0.85 + 0.15 * Math.sin(t * 2) + estrella.destello * 0.6;
         ctx.globalCompositeOperation = 'lighter';
@@ -881,8 +919,8 @@
         ctx.drawImage(BRILLO_CALIDO, estrella.x - tb2 / 2, estrella.y - tb2 / 2, tb2, tb2);
         ctx.globalAlpha = 1;
         ctx.globalCompositeOperation = 'source-over';
-        ctx.drawImage(imE, estrella.x - ew / 2, estrella.y - eh / 2, ew, eh);
-      } else {
+        if (!enArbol) ctx.drawImage(imE, estrella.x - ew / 2, estrella.y - eh / 2, ew, eh);
+      } else if (!enArbol) {
         ctx.filter = 'grayscale(0.7) brightness(0.6)';
         ctx.drawImage(imE, estrella.x - ew / 2, estrella.y - eh / 2, ew, eh);
         ctx.filter = 'none';

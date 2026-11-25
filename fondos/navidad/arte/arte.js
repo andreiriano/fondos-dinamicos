@@ -2,83 +2,80 @@
 window.ARTE = {
   "plano": {
     "archivo": "arte/plano.webp",
-    "w": 1920,
-    "h": 1080
+    "w": 2752,
+    "h": 1536
   },
-  "video": {
-    "mp4": "arte/plano.mp4",
-    "webm": "arte/plano.webm"
-  },
+  "video": null,
   "arbol": {
     "archivo": "arte/arbol.webp",
-    "w": 1049,
-    "h": 1479,
+    "w": 878,
+    "h": 1473,
     "original": [
-      1200,
-      1600
+      2752,
+      1536
     ],
     "recorte": [
-      76,
-      86,
-      1125,
-      1565
+      939,
+      34,
+      1817,
+      1507
     ]
   },
   "sprites": {
     "regalo-rojo": {
       "archivo": "arte/regalo-rojo.webp",
-      "w": 289,
-      "h": 279
+      "w": 360,
+      "h": 384
     },
     "regalo-azul": {
       "archivo": "arte/regalo-azul.webp",
-      "w": 229,
-      "h": 339
+      "w": 361,
+      "h": 384
     },
     "regalo-dorado": {
       "archivo": "arte/regalo-dorado.webp",
-      "w": 349,
-      "h": 239
+      "w": 361,
+      "h": 384
     },
     "estrella": {
       "archivo": "arte/estrella.webp",
-      "w": 294,
-      "h": 280
-    },
-    "copo-dorado": {
-      "archivo": "arte/copo-dorado.webp",
-      "w": 254,
-      "h": 244
+      "w": 350,
+      "h": 334
     },
     "adorno-rojo": {
       "archivo": "arte/adorno-rojo.webp",
-      "w": 169,
-      "h": 195
+      "w": 321,
+      "h": 413
     },
     "adorno-dorado": {
       "archivo": "arte/adorno-dorado.webp",
-      "w": 169,
-      "h": 195
+      "w": 323,
+      "h": 413
     },
     "adorno-azul": {
       "archivo": "arte/adorno-azul.webp",
-      "w": 169,
-      "h": 195
+      "w": 323,
+      "h": 413
     },
     "adorno-morado": {
       "archivo": "arte/adorno-morado.webp",
-      "w": 169,
-      "h": 195
+      "w": 322,
+      "h": 413
     },
-    "trineo": {
-      "archivo": "arte/trineo.webp",
-      "w": 726,
-      "h": 260
+    "copo-dorado": {
+      "archivo": "arte/copo-dorado.webp",
+      "w": 357,
+      "h": 411
     },
     "muneco": {
       "archivo": "arte/muneco.webp",
-      "w": 267,
-      "h": 665
+      "w": 288,
+      "h": 443
+    },
+    "trineo": {
+      "archivo": "arte/trineo.webp",
+      "w": 782,
+      "h": 312
     }
   }
 };

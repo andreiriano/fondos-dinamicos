@@ -6,14 +6,14 @@ Uso (desde la carpeta del repositorio):
 
 Lee originales-ia/<fondo>/ y escribe fondos/<fondo>/arte/:
 
-  plano.png        -> arte/plano.webp            (imagen de fondo, máx. 3840 px)
+  plano.png/.jpg   -> arte/plano.webp            (imagen de fondo, máx. 3840 px)
   plano-loop.mp4   -> arte/plano.mp4 + plano.webm (H.264 y VP9, sin audio, < ~8 MB cada uno;
                                                    se quita el último fotograma si repite el primero)
   arbol.png        -> arte/arbol.webp            (sin el verde, recortado, con transparencia)
   sprites.png      -> arte/<nombre>.webp         (cada objeto recortado por separado)
   todo             -> arte/arte.js               (tamaños y lista de archivos para el fondo)
 
-Fondo verde: se detecta el color del borde (p. ej. #00FF00), se calcula la transparencia por distancia a
+Fondo liso (verde #00FF00, magenta #FF00FF...): se detecta el color del borde, se calcula la transparencia por distancia a
 ese color, se "desmezcla" el verde de los bordes (sin halo verde) y se quitan motas sueltas.
 
 Sprites: los objetos se separan solos. Se guarda originales-ia/<fondo>/_sprites-indice.png con un número
@@ -57,12 +57,78 @@ def color_clave(img):
     return tuple(sorted(c)[len(c) // 2] for c in canales)
 
 
-def quitar_verde(img, clave=None, t0=70, t1=200):
-    """Devuelve una imagen RGBA sin el fondo de color `clave`.
+def _exceso(canales, clave):
+    """Cuánto "se parece al color de fondo" un píxel, sea cual sea ese color.
+
+    Canales altos del fondo (p. ej. G en #00FF00, R y B en #FF00FF) menos canales bajos:
+    min(altos) - max(bajos). Un rojo, un blanco o un dorado dan valores bajos aunque estén cerca.
+    Devuelve None si el fondo no tiene canales altos y bajos (gris, blanco...).
+    """
+    altos = [c for c, k in zip(canales, clave) if k >= 128]
+    bajos = [c for c, k in zip(canales, clave) if k < 128]
+    if not altos or not bajos:
+        return None
+    mm = ImageMath.lambda_eval
+    def minimo(lista):
+        m = lista[0]
+        for c in lista[1:]:
+            m = mm(lambda a: a["min"](a["x"], a["y"]), x=m, y=c)
+        return m
+    def maximo(lista):
+        m = lista[0]
+        for c in lista[1:]:
+            m = mm(lambda a: a["max"](a["x"], a["y"]), x=m, y=c)
+        return m
+    return mm(lambda a: a["x"] - a["y"], x=minimo(altos), y=maximo(bajos))
+
+
+def rellenar_huecos(alfa, dist, t0, minimo=80):
+    """Rellena "huecos" interiores que no son fondo de verdad (brillos de una bola parecidos al fondo).
+
+    Un hueco es una zona semitransparente que no toca el borde de la imagen. Si dentro hay algún píxel
+    del color de fondo puro (distancia < t0), es un hueco real (entre ramas, en los patines del trineo)
+    y se respeta; si no, era un reflejo y se vuelve opaco.
+    """
+    w, h = alfa.size
+    a = bytearray(alfa.tobytes())
+    d = dist.point(lambda v: v).convert("L").tobytes() if dist.mode != "L" else dist.tobytes()
+    bajo = 255  # todo lo que no es opaco del todo
+    visto = bytearray(w * h)
+    rellenados = 0
+    for inicio in range(w * h):
+        if a[inicio] >= bajo or visto[inicio]:
+            continue
+        cola = deque([inicio])
+        visto[inicio] = 1
+        zona = []
+        toca_borde = puro = False
+        while cola:
+            i = cola.popleft()
+            zona.append(i)
+            x, y = i % w, i // w
+            if x == 0 or y == 0 or x == w - 1 or y == h - 1:
+                toca_borde = True
+            if d[i] < t0:
+                puro = True
+            for j in (i - 1 if x > 0 else -1, i + 1 if x < w - 1 else -1, i - w, i + w):
+                if 0 <= j < w * h and not visto[j] and a[j] < bajo:
+                    visto[j] = 1
+                    cola.append(j)
+        if not toca_borde and not puro and (len(zona) <= 12 or minimo <= len(zona) < w * h // 20):
+            for i in zona:
+                a[i] = 255
+            rellenados += len(zona)
+    if rellenados:
+        print(f"  (rellenados {rellenados} px de brillos que se confundían con el fondo)")
+    return Image.frombytes("L", (w, h), bytes(a))
+
+
+def quitar_verde(img, clave=None, t0=70, t1=200, huecos=False):
+    """Devuelve una imagen RGBA sin el fondo liso de color `clave` (verde, magenta, azul...).
 
     La transparencia sale de la distancia (suma de diferencias por canal) al color clave:
     <= t0 transparente, >= t1 opaco, en medio semitransparente. En los bordes semitransparentes se
-    recupera el color real quitando la parte de verde mezclada: F = K + (C - K) / alfa.
+    recupera el color real quitando la parte de fondo mezclada: F = K + (C - K) / alfa.
     """
     rgb = img.convert("RGB")
     if clave is None:
@@ -71,8 +137,10 @@ def quitar_verde(img, clave=None, t0=70, t1=200):
     r, g, b = rgb.split()
     mm = ImageMath.lambda_eval
     dist = mm(lambda a: abs(a["r"] - kr) + abs(a["g"] - kg) + abs(a["b"] - kb), r=r, g=g, b=b)
-    # Protección: lo que no es "más verde que rojo y azul" es siempre opaco (blancos, rojos, dorados...)
-    exceso = mm(lambda a: a["g"] - a["max"](a["r"], a["b"]), r=r, g=g, b=b)
+    # Protección: lo que no tiene "el tono del fondo" es siempre opaco (blancos, rojos, dorados...)
+    exceso = _exceso([r, g, b], clave)
+    if exceso is None:
+        exceso = mm(lambda a: a["d"] * 0 + 255, d=dist)
     alfa = mm(
         lambda a: a["convert"](
             a["max"](
@@ -86,6 +154,8 @@ def quitar_verde(img, clave=None, t0=70, t1=200):
     )
     # quitar alfas residuales muy bajas (ruido del fondo)
     alfa = alfa.point(lambda v: 0 if v < 18 else v)
+    if huecos:
+        alfa = rellenar_huecos(alfa, dist, t0)
 
     def desmezclar(canal, k):
         return mm(
@@ -96,20 +166,35 @@ def quitar_verde(img, clave=None, t0=70, t1=200):
             al=alfa,
         )
 
-    r2, g2, b2 = desmezclar(r, kr), desmezclar(g, kg), desmezclar(b, kb)
-    # Donde es opaco del todo, el color original es correcto; la fórmula da lo mismo con alfa=255.
-    # Quitar el verde que pueda quedar en el borde exterior (1-2 px): si el verde supera a rojo y azul
-    # y el píxel está junto a la transparencia, se limita el verde.
-    borde = alfa.point(lambda v: 255 if v < 250 else 0).filter(ImageFilter.MaxFilter(5))
-    maxrb = ImageChops.lighter(r2, b2)
-    g_limpio = ImageChops.darker(g2, ImageChops.add(maxrb, Image.new("L", maxrb.size, 12)))
-    g2 = Image.composite(g_limpio, g2, borde)
-    salida = Image.merge("RGBA", (r2, g2, b2, alfa))
+    canales = [desmezclar(r, kr), desmezclar(g, kg), desmezclar(b, kb)]
+    # Quitar el tono del fondo que pueda quedar en el borde exterior (halo): en una franja junto a la
+    # transparencia, a los canales "altos" del fondo se les resta lo que sobresalen de los "bajos".
+    ex2 = _exceso(canales, clave)
+    if ex2 is not None:
+        borde = alfa.point(lambda v: 255 if v < 250 else 0).filter(ImageFilter.MaxFilter(7))
+        sobra = mm(lambda a: a["max"](a["e"], 0), e=ex2)
+        limpios = []
+        for c, k in zip(canales, clave):
+            if k >= 128:
+                c2 = mm(lambda a: a["convert"](a["max"](a["c"] - a["s"], 0), "L"), c=c, s=sobra)
+                c = Image.composite(c2, c, borde)
+            limpios.append(c)
+        canales = limpios
+    salida = Image.merge("RGBA", (canales[0], canales[1], canales[2], alfa))
     # encoger 1 px el borde (evita una línea clara alrededor)
     choke = alfa.filter(ImageFilter.MinFilter(3))
     alfa_final = Image.blend(alfa, choke, 0.5)
     salida.putalpha(alfa_final)
     return salida, clave
+
+
+def buscar_original(carpeta, base):
+    """plano.png, plano.jpg, plano.jpeg o plano.webp (lo primero que exista)."""
+    for ext in (".png", ".jpg", ".jpeg", ".webp"):
+        ruta = os.path.join(carpeta, base + ext)
+        if os.path.isfile(ruta):
+            return ruta
+    return None
 
 
 # ---------------------------------------------------------- objetos separados
@@ -338,20 +423,20 @@ def main():
     os.makedirs(arte, exist_ok=True)
     manifiesto = {"plano": None, "video": None, "arbol": None, "sprites": {}}
 
-    ruta = os.path.join(origen, "plano.png")
-    if os.path.isfile(ruta):
+    ruta = buscar_original(origen, "plano")
+    if ruta:
         with Image.open(ruta) as img:
             tam = guardar_webp(img.convert("RGB"), os.path.join(arte, "plano.webp"), calidad=82, max_lado=3840)
         manifiesto["plano"] = {"archivo": "arte/plano.webp", "w": tam[0], "h": tam[1]}
-        print(f"plano.png -> arte/plano.webp {tam[0]}x{tam[1]} ({os.path.getsize(os.path.join(arte, 'plano.webp')) // 1024} KB)")
+        print(f"{os.path.basename(ruta)} -> arte/plano.webp {tam[0]}x{tam[1]} ({os.path.getsize(os.path.join(arte, 'plano.webp')) // 1024} KB)")
 
     ruta = os.path.join(origen, "plano-loop.mp4")
     if os.path.isfile(ruta) and not a.sin_video:
         print("plano-loop.mp4")
         manifiesto["video"] = procesar_video(ruta, arte)
 
-    ruta = os.path.join(origen, "arbol.png")
-    if os.path.isfile(ruta):
+    ruta = buscar_original(origen, "arbol")
+    if ruta:
         with Image.open(ruta) as img:
             sin_verde, clave = quitar_verde(img)
         limpio, caja = recortar(limpiar_motas(sin_verde), con_caja=True)
@@ -359,13 +444,13 @@ def main():
         # "recorte" y "original" permiten dar posiciones (luces, estrella...) sobre arbol.png original
         manifiesto["arbol"] = {"archivo": "arte/arbol.webp", "w": tam[0], "h": tam[1],
                                "original": list(sin_verde.size), "recorte": list(caja)}
-        print(f"arbol.png (fondo #{clave[0]:02X}{clave[1]:02X}{clave[2]:02X}) -> arte/arbol.webp {tam[0]}x{tam[1]} "
+        print(f"{os.path.basename(ruta)} (fondo #{clave[0]:02X}{clave[1]:02X}{clave[2]:02X}) -> arte/arbol.webp {tam[0]}x{tam[1]} "
               f"({os.path.getsize(os.path.join(arte, 'arbol.webp')) // 1024} KB)")
 
-    ruta = os.path.join(origen, "sprites.png")
-    if os.path.isfile(ruta):
+    ruta = buscar_original(origen, "sprites")
+    if ruta:
         with Image.open(ruta) as img:
-            sin_verde, clave = quitar_verde(img)
+            sin_verde, clave = quitar_verde(img, huecos=True)
         piezas = separar_sprites(sin_verde)
         hoja_indice(sin_verde, piezas, os.path.join(origen, "_sprites-indice.jpg"))
         nombres = leer_nombres(os.path.join(origen, "sprites.txt"))
@@ -379,7 +464,7 @@ def main():
                 continue
             tam = guardar_webp(pieza, os.path.join(arte, nombre + ".webp"), calidad=88, max_lado=1024)
             manifiesto["sprites"][nombre] = {"archivo": f"arte/{nombre}.webp", "w": tam[0], "h": tam[1]}
-        print(f"sprites.png -> {len(manifiesto['sprites'])} sprites: {', '.join(manifiesto['sprites'])}")
+        print(f"{os.path.basename(ruta)} -> {len(manifiesto['sprites'])} sprites: {', '.join(manifiesto['sprites'])}")
         print(f"  índice con números: {os.path.relpath(os.path.join(origen, '_sprites-indice.jpg'), RAIZ)}")
 
     with open(os.path.join(arte, "arte.js"), "w", encoding="utf-8", newline="\n") as f:
