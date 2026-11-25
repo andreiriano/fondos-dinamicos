@@ -7,19 +7,28 @@
     "step": 1,
     "value": 60
   },
-  "fuerzaCursor": {
+  "parallax": {
     "type": "slider",
-    "text": "Fuerza del ratón sobre la nieve",
+    "text": "Profundidad al mover el ratón",
     "min": 0,
     "max": 100,
     "step": 1,
     "value": 60
   },
-  "patronLuces": {
-    "type": "dropdown",
-    "text": "Juego de luces",
-    "items": ["Parpadeo clásico", "Ola", "Arcoíris", "Blanco cálido"],
-    "value": 0
+  "video": {
+    "type": "checkbox",
+    "text": "Fondo animado en vídeo (desactívalo para gastar menos)",
+    "value": true
+  },
+  "marcador": {
+    "type": "checkbox",
+    "text": "Mostrar marcador de copos y racha",
+    "value": true
+  },
+  "arbolEncendido": {
+    "type": "checkbox",
+    "text": "Árbol siempre encendido (sin juego)",
+    "value": false
   },
   "fps": {
     "type": "slider",
@@ -27,6 +36,11 @@
     "min": 15,
     "max": 60,
     "step": 15,
-    "value": 30
+    "value": 60
+  },
+  "reiniciar": {
+    "type": "button",
+    "text": "Borrar el progreso del juego",
+    "value": "Reiniciar"
   }
 }

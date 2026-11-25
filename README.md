@@ -7,14 +7,14 @@ Reaccionan al ratón: la nieve se aparta del cursor, las hojas vuelan si las sop
 
 | | | |
 |---|---|---|
-| ![Navidad nevada](fondos/navidad/thumbnail.jpg) | ![Atardecer de verano](fondos/verano/thumbnail.jpg) | ![Bosque de otoño](fondos/otono/thumbnail.jpg) |
+| ![Navidad: enciende el árbol](fondos/navidad/thumbnail.jpg) | ![Atardecer de verano](fondos/verano/thumbnail.jpg) | ![Bosque de otoño](fondos/otono/thumbnail.jpg) |
 | ![Aurora de invierno](fondos/invierno/thumbnail.jpg) | ![Mi fondo con efecto](plantilla-gif-video/thumbnail.jpg) | |
 
 ## Fondos disponibles
 
 | Fondo | Qué puedes hacer | Descarga |
 |---|---|---|
-| **Navidad nevada** | Mueve el ratón y la nieve se aparta. Pasa por la guirnalda y las bombillas se balancean. Toca el árbol para cambiar las luces, los regalos para abrirlos y cualquier otro sitio para una ráfaga de nieve. | [fondo-navidad.zip](descargas/fondo-navidad.zip) |
+| **Navidad: enciende el árbol** | Un fondo que es un juego. Toca cada bombilla (o deja el ratón quieto encima) para encender el árbol; con todas, se ilumina la estrella y hay fuegos artificiales. Del 1 al 24 de diciembre, abre un regalo cada día. Recoge los copos dorados para desbloquear el trineo de Papá Noel, un muñeco de nieve y más luces. Tu progreso se guarda. | [fondo-navidad.zip](descargas/fondo-navidad.zip) |
 | **Atardecer de verano** | Empuja las pompas de jabón y revienta las que toques. Pasa el ratón por el mar y deja ondas. Toca una gaviota y saldrá volando. | [fondo-verano.zip](descargas/fondo-verano.zip) |
 | **Bosque de otoño** | Sopla las hojas moviendo el ratón, también las que ya están en el suelo. Toca el arce para sacudirlo o haz clic para una ráfaga de viento. | [fondo-otono.zip](descargas/fondo-otono.zip) |
 | **Aurora de invierno** | La aurora boreal se curva y brilla hacia el ratón. Toca el cielo para ver una estrella fugaz. Puedes elegir sus colores. | [fondo-invierno.zip](descargas/fondo-invierno.zip) |
@@ -113,6 +113,18 @@ guarda caché y permite regenerar miniaturas con `FondosDinamicos.actual.captura
 
 **Ajustes por la dirección**: cualquier ajuste se puede pasar en la URL, por ejemplo
 `fondos/navidad/index.html?nieve=100&fps=60&patronLuces=2`.
+
+**Arte generado con IA** (fondo de Navidad): los originales de Gemini y Veo van en `originales-ia/navidad/`
+(fuera de git; los prompts, en [originales-ia/PROMPTS.md](originales-ia/PROMPTS.md)). Para quitar el fondo verde,
+separar los sprites y optimizar imagen y vídeo (WebP, MP4 H.264 y WebM de menos de ~8 MB):
+
+```powershell
+py herramientas/preparar_arte.py navidad
+```
+
+Las posiciones de luces, adornos y regalos están en `fondos/navidad/escena.js`. Para colocarlas sobre un árbol
+nuevo, abre `fondos/navidad/index.html?editar=1` y haz clic sobre cada bombilla. Para probar el calendario de
+adviento otro día: `index.html?fecha=2026-12-05`.
 
 **Crear un fondo nuevo**: copia una carpeta de `fondos/`, cambia `fondo.js`, `LivelyInfo.json` y
 `LivelyProperties.json`, añádela a `PAQUETES` en `herramientas/empaquetar.py` y ejecuta:

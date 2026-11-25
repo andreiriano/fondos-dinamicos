@@ -1,0 +1,12 @@
+# número del índice = nombre
+1 = regalo-rojo
+2 = regalo-azul
+3 = regalo-dorado
+4 = estrella
+5 = copo-dorado
+6 = adorno-rojo
+7 = adorno-dorado
+8 = adorno-azul
+9 = adorno-morado
+10 = trineo
+11 = muneco

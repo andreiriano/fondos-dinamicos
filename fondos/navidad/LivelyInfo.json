@@ -1,9 +1,9 @@
 {
   "AppVersion": "2.1.0.0",
-  "Title": "Navidad nevada",
+  "Title": "Navidad: enciende el árbol",
   "Thumbnail": "thumbnail.jpg",
   "Preview": null,
-  "Desc": "Nieve que se aparta del ratón, guirnalda de luces que se balancea y árbol con regalos que puedes tocar.",
+  "Desc": "Un fondo que es un juego: enciende las luces del árbol con el ratón, abre un regalo cada día de adviento y recoge copos dorados para desbloquear sorpresas.",
   "Author": "Fondos Dinámicos",
   "License": "MIT",
   "Contact": "https://xuiatek.com/fondos",
@@ -12,6 +12,11 @@
   "Arguments": "--pause-event true",
   "IsAbsolutePath": false,
   "Id": null,
-  "Tags": ["navidad", "nieve", "interactivo"],
-  "Version": 1
+  "Tags": [
+    "navidad",
+    "juego",
+    "adviento",
+    "interactivo"
+  ],
+  "Version": 2
 }

@@ -6,3 +6,9 @@ Thumbs.db
 desktop.ini
 .DS_Store
 pruebas-locales/
+
+# Originales de IA: pesados; se guardan fuera de git (los procesados van en fondos/*/arte)
+originales-ia/**
+!originales-ia/*/
+!originales-ia/**/*.md
+!originales-ia/**/sprites.txt

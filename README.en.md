@@ -8,14 +8,14 @@ northern lights bend towards you.
 
 | | | |
 |---|---|---|
-| ![Snowy Christmas](fondos/navidad/thumbnail.jpg) | ![Summer sunset](fondos/verano/thumbnail.jpg) | ![Autumn forest](fondos/otono/thumbnail.jpg) |
+| ![Christmas: light up the tree](fondos/navidad/thumbnail.jpg) | ![Summer sunset](fondos/verano/thumbnail.jpg) | ![Autumn forest](fondos/otono/thumbnail.jpg) |
 | ![Winter aurora](fondos/invierno/thumbnail.jpg) | ![My wallpaper with an effect](plantilla-gif-video/thumbnail.jpg) | |
 
 ## Available wallpapers
 
 | Wallpaper | What you can do | Download |
 |---|---|---|
-| **Snowy Christmas** | Move the mouse and the snow moves aside. Brush the string of lights and the bulbs swing. Click the tree to change the lights, the presents to open them, and anywhere else for a puff of snow. | [fondo-navidad.zip](descargas/fondo-navidad.zip) |
+| **Christmas: light up the tree** | A wallpaper that is a game. Touch each bulb (or rest the mouse on it) to light up the tree; once they're all on, the star shines and there are fireworks. From 1 to 24 December, open a present every day. Collect golden snowflakes to unlock Santa's sleigh, a snowman and more lights. Your progress is saved. | [fondo-navidad.zip](descargas/fondo-navidad.zip) |
 | **Summer sunset** | Push the soap bubbles around and pop the ones you click. Move over the sea to leave ripples. Click a seagull and it flies off. | [fondo-verano.zip](descargas/fondo-verano.zip) |
 | **Autumn forest** | Blow the leaves around with the mouse, even the ones on the ground. Click the maple to shake it, or click anywhere for a gust of wind. | [fondo-otono.zip](descargas/fondo-otono.zip) |
 | **Winter aurora** | The northern lights bend and glow towards your mouse. Click the sky for a shooting star. You can pick its colours. | [fondo-invierno.zip](descargas/fondo-invierno.zip) |
@@ -114,6 +114,18 @@ and lets you regenerate thumbnails with `FondosDinamicos.actual.capturar()`.
 
 **Settings in the URL**: any setting can be passed in the address, e.g.
 `fondos/navidad/index.html?nieve=100&fps=60&patronLuces=2`.
+
+**AI-generated art** (Christmas wallpaper): the Gemini and Veo originals go in `originales-ia/navidad/`
+(kept out of git; prompts in [originales-ia/PROMPTS.md](originales-ia/PROMPTS.md)). To remove the green background,
+split the sprites and optimise image and video (WebP, H.264 MP4 and WebM under ~8 MB):
+
+```powershell
+py herramientas/preparar_arte.py navidad
+```
+
+Light, ornament and present positions live in `fondos/navidad/escena.js`. To place them on a new tree, open
+`fondos/navidad/index.html?editar=1` and click each bulb. To try the advent calendar on another day:
+`index.html?fecha=2026-12-05`.
 
 **New wallpaper**: copy a folder in `fondos/`, change `fondo.js`, `LivelyInfo.json` and `LivelyProperties.json`,
 add it to `PAQUETES` in `herramientas/empaquetar.py` and run:
