@@ -24,6 +24,9 @@ window.ESCENA = {
     estrella: [0.4996, 0.078, 0.11],
     estrellaEnArbol: true,  // el dibujo ya trae la estrella: al encender solo se le añade brillo
 
+    // Sombra en la nieve: [centro x, y, radio en fracción del ancho del árbol]
+    sombra: [0.5, 0.975, 0.62],
+
     // Huecos para los adornos del calendario de adviento (se rellenan en orden)
     adornos: [[0.4924,0.2962],[0.4524,0.3385],[0.5233,0.3906],[0.476,0.4557],[0.5451,0.5208],[0.436,0.5729],[0.4978,0.5534],[0.5596,0.612],[0.4179,0.6901],[0.5305,0.7161],[0.4797,0.7682],[0.5814,0.8138]],
 
@@ -35,6 +38,7 @@ window.ESCENA = {
   plano: {
     luna: [0.215, 0.184],    // centro de la luna (para el trineo)
     horizonte: 0.57,         // por debajo no se lanzan fuegos artificiales
+    enfoqueVertical: 0.22,   // en pantallas verticales se ve esta parte (0 izquierda, 0.5 centro): luna y aldea
     chimeneas: [[0.1483,0.431],[0.3118,0.4948],[0.3372,0.5488],[0.4041,0.6133],[0.149,0.6393]],
     ventanas: [[0.1025,0.5013],[0.1842,0.4961],[0.1682,0.5521],[0.129,0.6315],[0.141,0.7207],[0.1955,0.791],[0.2562,0.5423],[0.286,0.5443],[0.3009,0.6048],[0.3125,0.6556],[0.3605,0.6882],[0.3681,0.7422],[0.3924,0.7435],[0.4153,0.7389],[0.2544,0.6289],[0.3147,0.7331],[0.3481,0.7975]]
   },

@@ -9,12 +9,13 @@ Lee originales-ia/<fondo>/ y escribe fondos/<fondo>/arte/:
   plano.png/.jpg   -> arte/plano.webp            (imagen de fondo, máx. 3840 px)
   plano-loop.mp4   -> arte/plano.mp4 + plano.webm (H.264 y VP9, sin audio, < ~8 MB cada uno;
                                                    se quita el último fotograma si repite el primero)
-  arbol.png        -> arte/arbol.webp            (sin el verde, recortado, con transparencia)
+  arbol.png/.jpg   -> arte/arbol.webp            (sin el fondo magenta, recortado, con transparencia)
   sprites.png      -> arte/<nombre>.webp         (cada objeto recortado por separado)
   todo             -> arte/arte.js               (tamaños y lista de archivos para el fondo)
 
 Fondo liso (verde #00FF00, magenta #FF00FF...): se detecta el color del borde, se calcula la transparencia por distancia a
-ese color, se "desmezcla" el verde de los bordes (sin halo verde) y se quitan motas sueltas.
+ese color, se "desmezcla" el fondo de los bordes (sin halo rosado) y se quitan motas sueltas.
+Se recomienda magenta puro #FF00FF: un árbol verde sobre verde no se recorta bien.
 
 Sprites: los objetos se separan solos. Se guarda originales-ia/<fondo>/_sprites-indice.png con un número
 encima de cada uno. Para darles nombre, crea originales-ia/<fondo>/sprites.txt con líneas como:

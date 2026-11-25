@@ -83,7 +83,7 @@
       var im = img.plano;
       if (!im) return;
       var s = Math.max(w / im.width, h / im.height);
-      ctx.drawImage(im, (w - im.width * s) / 2, (h - im.height * s) / 2, im.width * s, im.height * s);
+      ctx.drawImage(im, (w - im.width * s) * enfoquePlano(), (h - im.height * s) / 2, im.width * s, im.height * s);
     }
   });
 
@@ -123,6 +123,7 @@
         src.src = A.video[par[0]]; src.type = par[1];
         video.appendChild(src);
       });
+      video.style.objectPosition = (enfoquePlano() * 100).toFixed(1) + '% 50%';
       video.style.opacity = '0';
       video.style.transition = 'opacity .8s';
       video.addEventListener('playing', function () { video.style.opacity = '1'; });
@@ -154,10 +155,14 @@
     var a = datosArbol();
     return [((x - caja.x0) * (a.r[2] - a.r[0]) / caja.w + a.r[0]) / a.ow, ((y - caja.y0) * (a.r[3] - a.r[1]) / caja.h + a.r[1]) / a.oh];
   }
+  // Qué parte del plano se ve cuando la pantalla es más estrecha que la imagen (0 = izquierda, 0.5 = centro)
+  function enfoquePlano() {
+    return e.alto > e.ancho * 1.05 && S.plano.enfoqueVertical !== undefined ? S.plano.enfoqueVertical : 0.5;
+  }
   function planoAPantalla(u, v) {
     var pw = A.plano ? A.plano.w : 1920, ph = A.plano ? A.plano.h : 1080;
     var s = Math.max(e.ancho / pw, e.alto / ph);
-    return [(e.ancho - pw * s) / 2 + u * pw * s, (e.alto - ph * s) / 2 + v * ph * s];
+    return [(e.ancho - pw * s) * enfoquePlano() + u * pw * s, (e.alto - ph * s) / 2 + v * ph * s];
   }
 
   function preparar(estado) {
@@ -170,6 +175,9 @@
     caja.x0 = conf.x * W - caja.w / 2;
     caja.y0 = conf.base * H - caja.h;
     luna = planoAPantalla(S.plano.luna[0], S.plano.luna[1]);
+    var posicion = (enfoquePlano() * 100).toFixed(1) + '% 50%';
+    document.getElementById('imagen').style.objectPosition = posicion;
+    if (video) video.style.objectPosition = posicion;
     escPlano = Math.max(W / (A.plano ? A.plano.w : 1920), H / (A.plano ? A.plano.h : 1080));
     chimeneas = (S.plano.chimeneas || []).map(function (q) { return planoAPantalla(q[0], q[1]); });
     ventanas = (S.plano.ventanas || []).map(function (q, i) { var v = planoAPantalla(q[0], q[1]); return { x: v[0], y: v[1], fase: i * 2.3, vel: 0.7 + (i % 5) * 0.25 }; });
@@ -298,6 +306,18 @@
 
   // ---------- Árbol (capa fija) ----------
   function pintarArbol(ctx, e) {
+    // sombra suave sobre la nieve, bajo la base del árbol (la luna está a la izquierda: se alarga a la derecha)
+    var sb = S.arbol.sombra || [0.5, 0.975, 0.62];
+    var ps = arbolAPantalla(sb[0], sb[1]);
+    var rx = caja.w * sb[2], ry = caja.h * 0.045;
+    ctx.save();
+    ctx.translate(ps[0] + rx * 0.12, ps[1]);
+    ctx.scale(1, ry / rx);
+    var gs = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+    gs.addColorStop(0, 'rgba(18,26,64,0.55)'); gs.addColorStop(0.55, 'rgba(18,26,64,0.28)'); gs.addColorStop(1, 'rgba(18,26,64,0)');
+    ctx.fillStyle = gs;
+    ctx.beginPath(); ctx.arc(0, 0, rx, 0, TAU); ctx.fill();
+    ctx.restore();
     if (img.arbol) ctx.drawImage(img.arbol, caja.x0, caja.y0, caja.w, caja.h);
     if (J.desbloqueado('muneco')) pintarMuneco(ctx);
   }
